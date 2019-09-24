@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-const BoatContext = React.createContext();
+export const BoatContext = React.createContext();
+const apiKey = ``;
+let ferryUrl = `http://www.wsdot.wa.gov/Ferries/API/Vessels/rest/vessellocations?apiaccesscode=${apiKey}`;
 
-let ferryUrl = ``;
-const apiKey = `80e61cf4-541b-4651-8228-6376d80567f7`;
 
-const BoatProvider = props => {
+export const BoatProvider = ({ children }) => {
+
   const [ferries, setFerries] = useState([]);
   const fetchFerries = async () => {
-    axios.get(``);
+    const response = await fetch(ferryUrl);
+    const ferryData = await response.json();
+    console.log(ferryData);
+    setFerries(ferryData);
+    // axios.get(`http://www.wsdot.wa.gov/Ferries/API/Vessels/rest/vessellocations?apiaccesscode=`)
+    //   .then(response => {
+    //     console.log(response);
+    //     // setState({
+    //     //   ferries: response
+    //     // })
+    //   })
   };
   useEffect(() => {
-    fetchFerries;
+    fetchFerries();
   }, [ferries]);
 
   return (
     <BoatContext.Provider
-      value={{
-        ferries
-      }}
-    ></BoatContext.Provider>
+      value={[ferries, setFerries]}
+    >{children}</BoatContext.Provider>
   );
 };
