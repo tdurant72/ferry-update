@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-export const BoatContext = React.createContext();
-const apiKey = ``;
-let ferryUrl = `http://www.wsdot.wa.gov/Ferries/API/Vessels/rest/vessellocations?apiaccesscode=${apiKey}`;
+
+export const BoatContext = React.createContext({
+  ferries: [],
+  setFerries: () => { }
+});
+
+const apiKey = `80e61cf4-541b-4651-8228-6376d80567f7`;
+let ferryUrl = `https://cors-anywhere.herokuapp.com/http://www.wsdot.wa.gov/Ferries/API/Vessels/rest/vessellocations?apiaccesscode=${apiKey}`;
 
 
-export const BoatProvider = ({ children }) => {
+export const BoatProvider = (props) => {
 
-  const [ferries, setFerries] = useState([]);
+  const [ferries, setFerries] = useState({
+    ferries: [],
+    setFerries: () => { }
+  });
   const fetchFerries = async () => {
     const response = await fetch(ferryUrl);
     const ferryData = await response.json();
-    console.log(ferryData);
+    //console.log(ferryData);
     setFerries(ferryData);
-    // axios.get(`http://www.wsdot.wa.gov/Ferries/API/Vessels/rest/vessellocations?apiaccesscode=`)
-    //   .then(response => {
-    //     console.log(response);
-    //     // setState({
-    //     //   ferries: response
-    //     // })
-    //   })
   };
   useEffect(() => {
     fetchFerries();
-  }, [ferries]);
+  }, []);
 
   return (
     <BoatContext.Provider
-      value={[ferries, setFerries]}
-    >{children}</BoatContext.Provider>
+      value={{
+        ferries: ferries,
+        updateFerries: () => {
+          setFerries({ ...ferries })
+        }
+      }}>
+      {props.children}
+    </BoatContext.Provider>
   );
 };

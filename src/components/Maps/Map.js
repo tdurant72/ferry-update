@@ -1,11 +1,16 @@
 import React, { Component, useState, useEffect } from "react";
 import "./Map.css";
 import views from "../../data/views";
-import FetchMapData from "../../calls/FetchMapData";
-export default function Map() {
-  const [map, setMap] = useState(null);
+//import FetchMapData from "../../calls/FetchMapData";
+import Boats from '../Boat/Boats'
+export default function Map(props) {
+
   //const [views, setViews] = useState([]);
   const [anchor, setAnchor] = useState(null);
+  const [ferryLayer, setFerryLayer] = useState(null);
+  const [map, setMap] = useState(null);
+  const [filteredFerries, setFilteredFerries] = useState([]);
+  const [boatPins, setBoatPins] = useState([]);
   //const [data, loading] = FetchMapData();
   useEffect(() => {
     let mapLoading = true;
@@ -22,7 +27,7 @@ export default function Map() {
     let lat = views[0].geometry.coordinates[0];
     let lng = views[0].geometry.coordinates[1];
 
-    const initMap = new window.Microsoft.Maps.Map(
+    const map = new window.Microsoft.Maps.Map(
       document.getElementById("map"),
       {
         center: new window.Microsoft.Maps.Location(lat, lng),
@@ -31,8 +36,34 @@ export default function Map() {
       }
     );
     var layer = new window.Microsoft.Maps.Layer();
+    let ferryLayer = new window.Microsoft.Maps.Layer();
+
   };
-  return <div id="map"></div>;
+  const renderBoatPin = (boatId, COG, Latitude, Longitude, VesselName, SOG, boatIcon, boatPin, boatLocation, summary, time) => {
+    this.setBoatPins({ boatPins })
+    ferryLayer.add(boatPin)
+    map.entities.push(boatPin);
+    //console.log("renderBoatPin called")
+    let boatInfobox = new window.Microsoft.Maps.Infobox(boatLocation, {
+      visible: false
+    })
+    console.log(map)
+
+    // boatInfobox.setMap(this.state.map)
+    // window.Microsoft.Maps.Events.addHandler(boatPin, "click", function () {
+    //     boatInfobox.setOptions({
+    //         visible: true,
+    //         title: VesselName,
+    //         description: summary
+    //     })
+    // })
+  }
+  return <div id="map">
+    {
+      <Boats />
+    }
+
+  </div>;
 }
 
 //this function has to be outside of component
