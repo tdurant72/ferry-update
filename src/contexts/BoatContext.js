@@ -6,7 +6,7 @@ export const BoatContext = React.createContext({
   setFerries: () => { }
 });
 
-const apiKey = `80e61cf4-541b-4651-8228-6376d80567f7`;
+const apiKey = ``;
 let ferryUrl = `https://cors-anywhere.herokuapp.com/http://www.wsdot.wa.gov/Ferries/API/Vessels/rest/vessellocations?apiaccesscode=${apiKey}`;
 
 
